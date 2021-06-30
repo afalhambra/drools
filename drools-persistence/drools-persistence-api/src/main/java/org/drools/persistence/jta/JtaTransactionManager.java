@@ -85,8 +85,14 @@ public class JtaTransactionManager
         } else {
             this.tm = ( javax.transaction.TransactionManager ) ( (tm != null) ? tm : findTransactionManager( this.ut ) );
         }
+        try {
+            this.tm.setTransactionTimeout(7200);
+        } catch (SystemException e) {
+            logger.error("Error while setting transaction timeout", e);
+        }
         this.tsr = (tsr != null) ? tsr : findTransactionSynchronizationRegistry( this.ut,
                                                                                  this.tm );
+
     }
 
     protected javax.transaction.TransactionManager findTransactionManager(UserTransaction ut) {
